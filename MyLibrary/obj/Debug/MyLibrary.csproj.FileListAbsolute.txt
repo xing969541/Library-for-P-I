@@ -1,0 +1,12 @@
+C:\Users\Administrator\Desktop\MyLibrary\MyLibrary\bin\Debug\MyLibrary.dll
+C:\Users\Administrator\Desktop\MyLibrary\MyLibrary\bin\Debug\MyLibrary.pdb
+C:\Users\Administrator\Desktop\MyLibrary\MyLibrary\obj\Debug\MyLibrary.dll
+C:\Users\Administrator\Desktop\MyLibrary\MyLibrary\obj\Debug\MyLibrary.pdb
+C:\Users\Administrator\Desktop\MyLibrary\MyLibrary\obj\Debug\MyLibrary.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\MyLibrary\MyLibrary\bin\Debug\MyLibrary.XML
+C:\Users\PC\Desktop\MyLibrary\MyLibrary\bin\Debug\MyLibrary.XML
+C:\Users\PC\Desktop\MyLibrary\MyLibrary\bin\Debug\MyLibrary.dll
+C:\Users\PC\Desktop\MyLibrary\MyLibrary\bin\Debug\MyLibrary.pdb
+C:\Users\PC\Desktop\MyLibrary\MyLibrary\obj\Debug\MyLibrary.csprojResolveAssemblyReference.cache
+C:\Users\PC\Desktop\MyLibrary\MyLibrary\obj\Debug\MyLibrary.dll
+C:\Users\PC\Desktop\MyLibrary\MyLibrary\obj\Debug\MyLibrary.pdb

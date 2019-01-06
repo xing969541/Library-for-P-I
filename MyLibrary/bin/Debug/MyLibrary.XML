@@ -1,0 +1,553 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyLibrary</name>
+    </assembly>
+    <members>
+        <member name="T:MyLibrary.FSPair">
+            <summary>
+            父子节点对，用于存储成对出现的数据。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.FSPair.#ctor(System.Int32,System.Int32)">
+            <summary>
+            父子节点对 构造函数
+            </summary>
+            <param name="father">父节点名称</param>
+            <param name="son">子节点名称</param>
+        </member>
+        <member name="P:MyLibrary.FSPair.Father">
+            <summary>
+            读取或修改父值。
+            </summary>
+        </member>
+        <member name="P:MyLibrary.FSPair.Son">
+            <summary>
+            读取或修改子值。
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.DataBaseOperator">
+            <summary>
+            本类用于C#与数据库间的交互，为抽象类。
+            为适用于不同结构的数据库，应从本类继承后进行扩展。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.DataBaseOperator.#ctor">
+            <summary>
+            无参构造函数，自动连接至本地服务器master数据库。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.DataBaseOperator.#ctor(System.String)">
+            <summary>
+            构造函数。初始化与数据库的连接。
+            </summary>
+            <param name="connectString">数据库连接信息，用于初始化SqlConnection类。</param>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.DataBaseOperator.#ctor(System.String,System.String)">
+            <summary>
+            构造函数。初始化与数据库的连接。
+            </summary>
+            <param name="dataSource">服务器名</param>
+            <param name="initalCatalog">数据库名</param>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.DataBaseOperator.Finalize">
+            <summary>
+            析构函数。用于确保数据库连接的关闭，避免未知错误。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.DataBaseOperator.GetDataSource">
+            <summary>
+            获取当前数据库连接字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.DataBaseOperator.SqlExecute(System.String)">
+            <summary>
+            在数据库中执行任意SQL语句。返回受影响的行数。
+            </summary>
+            <param name="SQLsentence">需执行的SQL语句。</param>
+            <returns>返回受影响的行数。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.DataBaseOperator.SqlSelect(System.String)">
+            <summary>
+            获取某张表内所有数据。返回一个数据集。查询所得表索引为0。
+            </summary>
+            <param name="SQLsentence">所需表的名字。</param>
+            <returns>返回包含所需表的数据集。表在其中索引为表名。</returns>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.PlentDataBaseOperator">
+            <summary>
+            本类用于操纵植物数据库。继承自DataBaseOperator。
+            已密封，无法继承。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.PlentDataBaseOperator.#ctor">
+            <summary>
+            无参构造函数，自动建立与本地服务器植物数据库的连接。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.PlentDataBaseOperator.#ctor(System.String)">
+            <summary>
+            传入dataSource进行连接。
+            </summary>
+            <param name="dataSource">数据库名</param>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.PlentDataBaseOperator.GetClassify(System.String)">
+            <summary>
+            获取某一物种分类信息。顺序为纲、纲拉丁名、科、科拉丁名、中文名、学名。
+            输入不存在时返回null
+            </summary>
+            <param name="name">物种名称。拉丁名或中文名皆可。</param>
+            <returns>返回字符串数组。顺序为纲、纲拉丁名、科、科拉丁名、中文名、学名。
+            输入不存在时返回null</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.PlentDataBaseOperator.GetInfo(System.String)">
+            <summary>
+            获取某一物种特征。顺序为中文名、学名、花序、叶形、叶形态、茎质地、果实、分布。
+            </summary>
+            <param name="name">物种名称。拉丁名或中文名皆可。</param>
+            <returns>返回字符串数组。顺序为中文名、学名、花序、叶形、叶形态、茎质地、果实、分布。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.PlentDataBaseOperator.GetNum(System.String)">
+            <summary>
+            获取某物种在数据库中的序号。
+            </summary>
+            <param name="name">物种名称。拉丁名或中文名皆可。</param>
+            <returns>物种序号</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.PlentDataBaseOperator.DeleteSpecies(System.String)">
+            <summary>
+            删除某一物种，输入学名或中文名皆可。
+            </summary>
+            <param name="name">需要删除的学名或中文名</param>
+            <returns>删除成功返回true。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.PlentDataBaseOperator.ClassStatistics(System.String)">
+            <summary>
+            对植物某科进行统计，返回一个DataSet（表索引为0）。
+            </summary>
+            <param name="name">需统计的科中文名或学名</param>
+            <returns>需统计的科中文名或学名</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.PlentDataBaseOperator.CountSpeciesInClass(System.String)">
+            <summary>
+            统计某一科内物种数量。
+            </summary>
+            <param name="name">需统计的科中文名或学名</param>
+            <returns></returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.PlentDataBaseOperator.FuzzySearch(MyLibrary.DataBaseOperator.PlentDataBaseOperator.Stem,MyLibrary.DataBaseOperator.PlentDataBaseOperator.Leaf,MyLibrary.DataBaseOperator.PlentDataBaseOperator.Fruit,MyLibrary.DataBaseOperator.PlentDataBaseOperator.Flower)">
+            <summary>
+            模糊查询。叶型及茎质地为精确。
+            </summary>
+            <param name="stem">茎质地</param>
+            <param name="leaf">叶型</param>
+            <param name="fruit">果实</param>
+            <param name="flower">花序</param>
+            <returns></returns>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.PlentDataBaseOperator.Stem">
+            <summary>
+            茎
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.PlentDataBaseOperator.Leaf">
+            <summary>
+            叶
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.PlentDataBaseOperator.Fruit">
+            <summary>
+            果
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.PlentDataBaseOperator.Flower">
+            <summary>
+            花
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.InsectDataBaseOperator">
+            <summary>
+            本类用于操纵昆虫数据库。继承自DataBaseOperator。
+            已密封，无法继承。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.InsectDataBaseOperator.#ctor">
+            <summary>
+            无参构造函数，自动建立与本地服务器昆虫数据库的连接。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.InsectDataBaseOperator.#ctor(System.String)">
+            <summary>
+            传入dataSource进行连接。
+            </summary>
+            <param name="dataSource">数据库名</param>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.InsectDataBaseOperator.GetClassify(System.String)">
+            <summary>
+            获取某一物种分类信息。
+            </summary>
+            <param name="name">物种名称。拉丁名或中文名皆可。</param>
+            <returns>返回字符串数组。顺序为目、目拉丁名、科、科拉丁名、中文名、学名。
+            输入不存在时返回null</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.InsectDataBaseOperator.GetInfo(System.String)">
+            <summary>
+            获取某一物种特征。
+            </summary>
+            <param name="name">物种名称。拉丁名或中文名皆可。</param>
+            <returns>返回字符串数组。顺序为中文名、学名、口器、触角、足、翅类型、翅对数。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.InsectDataBaseOperator.GetNum(System.String)">
+            <summary>
+            获取某物种在数据库中的序号。
+            </summary>
+            <param name="name">物种名称。拉丁名或中文名皆可。</param>
+            <returns>物种序号</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.InsectDataBaseOperator.ClassStatistics(System.String)">
+            <summary>
+            对植物某科进行统计，返回一个DataSet（表索引为0）。
+            </summary>
+            <param name="name">需统计的科中文名或学名</param>
+            <returns>需统计的科中文名或学名</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.InsectDataBaseOperator.CountSpeciesInClass(System.String)">
+            <summary>
+            统计某一科内物种数量。
+            </summary>
+            <param name="name">需统计的科中文名或学名</param>
+            <returns></returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.InsectDataBaseOperator.FuzzySearch(MyLibrary.DataBaseOperator.InsectDataBaseOperator.Mouth,MyLibrary.DataBaseOperator.InsectDataBaseOperator.Tentacle,MyLibrary.DataBaseOperator.InsectDataBaseOperator.Foot,MyLibrary.DataBaseOperator.InsectDataBaseOperator.Wing)">
+            <summary>
+            昆虫库模糊检索
+            </summary>
+            <param name="mouth">口器</param>
+            <param name="tentacle">触须</param>
+            <param name="foot">足</param>
+            <param name="wing">翅质地</param>
+            <returns></returns>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.InsectDataBaseOperator.Mouth">
+            <summary>
+            口器
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.InsectDataBaseOperator.Tentacle">
+            <summary>
+            触须
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.InsectDataBaseOperator.Foot">
+            <summary>
+            足
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.InsectDataBaseOperator.Wing">
+            <summary>
+            翅质地
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.UsersDatabaseOperator">
+            <summary>
+            本类用于操纵用户数据库。继承自DataBaseOperator。
+            已密封，无法继承。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.#ctor">
+            <summary>
+            无参构造函数。自动建立与数据库的连接。
+            </summary>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.#ctor(System.String)">
+            <summary>
+            传入dataSource进行连接。
+            </summary>
+            <param name="dataSource">数据库名</param>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.Register(MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo)">
+            <summary>
+            传入UserInfo进行注册。仅会返回是否注册成功，所以使用前请先检查插入数据的合法性。例如用户名、昵称重复。
+            </summary>
+            <param name="info">用户信息。</param>
+            <returns>返回插入是否成功。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.User_nameExist(System.String)">
+            <summary>
+            判断用户名是否已存在。
+            </summary>
+            <param name="user_name">输入用户名</param>
+            <returns>存在该用户名则返回true。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.NicknameExist(System.String)">
+            <summary>
+            判断昵称是否已存在。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <returns>存在该昵称则返回true。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.GetAuthority(System.String)">
+            <summary>
+            获取用户权限值。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <returns>用户权限值,不存在用户时返回-1</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.Login(System.String,System.String)">
+            <summary>
+            登陆时验证身份。返回内容为空时说明用户名密码不正确。
+            </summary>
+            <param name="user_name">用户名</param>
+            <param name="password">密码</param>
+            <returns>登录成功返回用户信息，其余返回空UserInfo。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.CheckQA(System.String,System.String,System.String)">
+            <summary>
+            检验密保问题及答案是否正确
+            </summary>
+            <param name="name">昵称或用户名</param>
+            <param name="question">密保问题</param>
+            <param name="answer">密保答案</param>
+            <returns>验证通过返回true</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.GetQuestion(System.String)">
+            <summary>
+            获取某用户的密保问题。需输入用户名。
+            </summary>
+            <param name="name">用户名</param>
+            <returns>密保问题</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.ResetPassword(System.String,System.String)">
+            <summary>
+            重新设置密码
+            </summary>
+            <param name="name">用户名</param>
+            <param name="new_password">新密码</param>
+            <returns>修改成功返回true</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.GetCreateTime(System.String)">
+            <summary>
+            获取用户创建用户时间。
+            </summary>
+            <param name="name">用户名</param>
+            <returns>用户创建时间</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.NicknameGetCreateTime(System.String)">
+            <summary>
+            通过昵称获取用户创建时间。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <returns></returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.ResetQA(System.String,System.String,System.String)">
+            <summary>
+            重新设置密保问题与答案
+            </summary>
+            <param name="nickname">用户名</param>
+            <param name="new_question">新问题</param>
+            <param name="new_answer">新答案</param>
+            <returns></returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.AddMessage(System.String,System.String)">
+            <summary>
+            用于添加留言。添加成功返回true。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="message">留言内容</param>
+            <returns>添加成果返回true</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.ResetInfo(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            重新设置个人信息
+            </summary>
+            <param name="name">用户昵称或者用户名</param>
+            <param name="new_nickname">新昵称</param>
+            <param name="new_birthday">新生日</param>
+            <param name="new_sex">新性别</param>
+            <param name="new_email">新邮箱</param>
+            <returns>重设个人信息成功返回true</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.ResetAuthority(System.String,System.Int32)">
+            <summary>
+            修改用户权限。权限仅能被设为0-9。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="authouity">修改后权限值</param>
+            <returns>修改成功返回true。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.GetAllMessage(System.Boolean)">
+            <summary>
+            获取数据库中所有留言。
+            </summary>
+            <param name="order">排序为true时返回从老到新的留言。</param>
+            <returns>返回留言信息数组</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.GetUserMessage(System.String,System.Boolean)">
+            <summary>
+            获取某用户的所有留言。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="order">排序为true时返回从老到新的留言。</param>
+            <returns>该用户留言数组</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.GetTimeMessage(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            获取某一时间点之前或之后的留言。默认为该时间点之后。
+            </summary>
+            <param name="time">时间点</param>
+            <param name="after">true为时间点前，false为时间点后</param>
+            <param name="order">排序为true时返回从老到新的留言。</param>
+            <returns>时间点前后留言数组</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.GetUserTimeMessage(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            获取某用户某一时间点之前或之后的留言。默认为该时间点之后。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="time">时间点</param>
+            <param name="after">true为时间点前，false为时间点后</param>
+            <param name="order">排序为true时返回从老到新的留言。</param>
+            <returns>该用户时间点前后留言数组</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.DeleteMessage(System.String,System.String)">
+            <summary>
+            删除某用户某时间的消息。删除成功返回true
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="time">留言时间</param>
+            <returns></returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.DeleteMessage(System.String)">
+            <summary>
+            删除某用户某时间的消息。删除成功返回true
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <returns></returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.AddFavour(System.String,System.Int32,System.Char)">
+            <summary>
+            向用户收藏夹中添加收藏。添加成功返回true，重复添加、昵称不存在等情况下添加失败返回false。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="num">收藏编号</param>
+            <param name="table">物种类型('p'或'i')</param>
+            <returns>添加成功返回true，重复添加、昵称不存在等情况下添加失败返回false。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.GetFavour(System.String,System.Char)">
+            <summary>
+            获取用户收藏内容，返回整型数组。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="table">物种类型('p'或'i')</param>
+            <returns>用户收藏物种的序号</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.DeleteFavour(System.String,System.Int32,System.Char)">
+            <summary>
+            删除用户收藏夹内内容。删除成功返回true。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="num">需删除的收藏编号</param>
+            <param name="table">物种类型('p'或'i')</param>
+            <returns>删除成功返回true。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.DeleteFavour(System.String,System.Int32[],System.Char)">
+            <summary>
+            批量删除用户收藏夹内容，删除成功返回true。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="num">需删除的收藏编号数组</param>
+            <param name="table">物种类型('p'或'i')</param>
+            <returns>删除成功返回true。</returns> 
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.EmptyFavour(System.String,System.Char)">
+            <summary>
+            清空用户收藏夹。
+            </summary>
+            <param name="nickname">用户昵称</param>
+            <param name="table">物种类型('p'或'i')</param>
+            <returns>清除成功返回true。</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.GetStringSHA256(System.String)">
+            <summary>
+            获取字符串经过SHA256算法加密后得到的字符串。
+            </summary>
+            <param name="source">需加密的字符串</param>
+            <returns>加密后的字符串</returns>
+        </member>
+        <member name="M:MyLibrary.DataBaseOperator.UsersDatabaseOperator.Extract(System.String,System.Int32,System.Int32)">
+            <summary>
+            截取从head开始，end结束（不包括end）的字符串
+            </summary>
+            <param name="init">被截取的字符串</param>
+            <param name="head">截取起始点</param>
+            <param name="end">截取终止点（不包括）</param>
+            <returns></returns>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo">
+            <summary>
+            用于存储与传递用户信息。
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo.user_name">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo.password">
+            <summary>
+            密码。明文传入密文传出。
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo.nickname">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo.sex">
+            <summary>
+            性别。"男"、"女"或""
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo.birthday">
+            <summary>
+            生日。格式为年.月.日
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo.email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo.question">
+            <summary>
+            密保问题
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.UserInfo.answer">
+            <summary>
+            密保回答
+            </summary>
+        </member>
+        <member name="T:MyLibrary.DataBaseOperator.UsersDatabaseOperator.MessageInfo">
+            <summary>
+            用于传递留言信息
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.MessageInfo.nickname">
+            <summary>
+            用户昵称
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.MessageInfo.message">
+            <summary>
+            留言内容
+            </summary>
+        </member>
+        <member name="F:MyLibrary.DataBaseOperator.UsersDatabaseOperator.MessageInfo.leavingTime">
+            <summary>
+            留言时间
+            </summary>
+        </member>
+    </members>
+</doc>
