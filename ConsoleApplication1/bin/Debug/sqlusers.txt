@@ -1,0 +1,26 @@
+create table users(
+	user_name varchar(20) not null primary key,
+	password char(64) not null,
+	nickname varchar(20) not null unique,
+	sex varchar(2) default '' check(sex in('男','女','')),
+	birthday date default '',
+	email varchar(50) default '',
+	question varchar(40) not null,
+	answer char(64) not null,
+	authority smallint not null default 0 check(authority<=9),
+	create_time datetime not null default getdate(),
+	favourp varchar(400) default ';' ,
+	favouri varchar(400) default ';' ,
+)
+
+create table _message(
+	nickname varchar(20) not null foreign key references users(nickname),
+	message varchar(400) not null,
+	leaving_time datetime default getdate(),
+)
+
+insert into users(user_name,password,nickname,question,answer,authority,create_time)
+values('Administrator','A46030FADC0FED6376FC34734F0D7B623D624009D1CB7048AA1F2C3686BA1A97','管理员','test','A471E043D0358191C25098E984647A62E2FCCB0062443184F304158B765D248E',9,'2018-12-18 18:50:13')
+--用户名Administrator，密码123456,问题test,回答test
+
+--insert into message values('Administrator','Hello World',getdate())

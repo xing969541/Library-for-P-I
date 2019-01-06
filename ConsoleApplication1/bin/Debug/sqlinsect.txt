@@ -1,0 +1,33 @@
+create table orders
+    (	c_oname varchar(100) unique, 
+	oname varchar(100) not null primary key
+	    check(oname like '[A-Z]%'),
+	c_features1 varchar(400) not null,
+	)
+
+create table family
+    (c_fname varchar(100) unique, 
+	fname varchar(100) not null primary key
+	    check(fname like '[A-Z]%'),
+	c_features2 varchar(400) not null, 
+	oname varchar(100) not null foreign key references orders(oname)
+	    check(oname like '[A-Z]%'),
+	)
+
+create table species 
+    (snum int not null primary key ,
+	c_sname varchar(100) not null unique, 
+	sname varchar(200) not null unique
+	    check(sname like '[A-Z]%[ ][a-z]%'),
+	fname varchar(100) not null foreign key references family(fname)
+	    check(fname like '[A-Z]%'),
+	)
+
+create table features
+    (snum int foreign key references species(snum),
+	 mouthparts char(6) check(mouthparts in ('ºçÎüÊ½','´ÌÎüÊ½','¾×½ÀÊ½','½ÀÎüÊ½','óÂÎüÊ½','')),
+	 tentacle varchar(20) check(tentacle in('ÓğÃ«×´','Çò¸Ë×´','°ô×´','±Ş×´','Ë¿×´','Ï¥×´','¸ÕÃ«×´','¾ßÃ¢×´','ÈúÒ¶×´','¾â³İ×´','Öâ×´','´¸×´','Ô²Í²×´','Ğë×´','')),
+	 foot varchar(20),
+	 wing_texture1 varchar(20) ,
+	 wing_num smallint,
+	)

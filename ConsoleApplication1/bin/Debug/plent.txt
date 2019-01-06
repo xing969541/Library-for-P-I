@@ -1,0 +1,142 @@
+create view looking
+as
+    select   species.snum as 编号,c_cname as 纲,c_fname as 科,c_sname as 中文名,sname as 学名,
+	    inflorescence as 花序,leaf_type as 叶型,leaf_shape as 叶形,stem as 茎质地,fruit as 果实,geog as 地理位置
+	from class,family,species,features
+	where class.cname=family.cname
+	    and family.fname=species.fname
+		and species.snum=features.snum;
+create view AllInfo
+as
+    select c_cname as 纲,class.cname as 纲学名,c_fname as 科,family.fname as 科学名,c_sname as 中文名,sname as 学名,
+	    inflorescence as 花序,leaf_type as 叶型,leaf_shape as 叶形,stem as 茎质地,fruit as 果实,geog as 地理位置,
+		class.c_features1 as 纲特征, family.c_features2 as 科特征
+	from class,family,species,features
+	where class.cname=family.cname
+	    and family.fname=species.fname
+		and species.snum=features.snum;
+create proc A1
+@c_sname varchar(20)
+as
+begin
+    declare @snum int
+    select @snum=snum from species where c_sname=@c_sname
+	delete from features where snum = @snum
+	delete from species where c_sname=@c_sname
+end;
+create trigger A1666
+on species
+for delete
+as
+begin
+    declare @snum int
+	select @snum=i.snum from deleted i
+    delete from features where snum=@snum
+end;
+create proc A2_1
+@c_sname varchar(100),
+@sname varchar(100),
+@fname varchar(100),
+@inflorescence varchar(1000),
+@leaf_type varchar(1000),
+@leaf_shape varchar(1000),
+@stem varchar(1000),
+@fruit varchar(1000),
+@geog varchar(1000)
+as
+    declare @snum int
+	if(@sname not in (select sname from species ) and @fname in (select fname from family))
+	begin
+	    select @snum = (max(snum)+1) from species 
+        insert into species values(@snum,@c_sname,@sname,@fname)
+		insert into features values(@snum,@inflorescence,@leaf_type,@leaf_shape,@stem,@fruit,@geog)
+    end;
+create trigger A2_1666
+on species
+for insert
+as
+begin
+    declare @snum int
+	select @snum=i.snum from inserted i
+    delete from features where snum=@snum
+end;
+create proc A2_2
+@fname varchar(100),
+@c_fname varchar(100),
+@c_features2 varchar(400),
+@cname varchar(100)
+as
+begin
+    if(@fname not in (select fname from family) and @cname in (select cname from class))
+	begin
+	    insert into family values(@c_fname,@fname,@c_features2,@cname)
+	end
+end;
+create proc A2_3
+@cname varchar(100),
+@c_cname varchar(100),
+@c_features1 varchar(400)
+as
+begin
+    if(@cname not in (select cname from class))
+	begin
+	    insert into class values(@c_cname,@cname,@c_features1)
+	end
+end;
+create proc A3_0
+@c_sname0 varchar(100),
+@c_sname varchar(100),
+@sname varchar(100),
+@fname varchar(100)
+as
+    if(@fname in (select fname from family))
+	begin
+	    update species set c_sname=@c_sname,sname=@sname,fname=@fname
+		where c_sname=@c_sname0 
+	end;
+create proc A3_1
+@c_sname0 varchar(100),
+@inflorescence varchar(1000),
+@leaf_type varchar(1000),
+@leaf_shape varchar(1000),
+@stem varchar(1000),
+@fruit varchar(1000),
+@geog varchar(1000)
+as
+    declare @snum int
+	select @snum=snum from species where c_sname=@c_sname0
+	update features set inflorescence=@inflorescence,leaf_type=@leaf_type,
+		leaf_shape=@leaf_shape,stem=@stem,fruit=@fruit,geog=@geog
+	where snum=@snum;
+create proc A3_2
+@c_sname0 varchar(100),
+@fname varchar(100),
+@c_fname varchar(100),
+@c_features2 varchar(400),
+@cname varchar(100)
+as
+begin
+    if(@cname in (select cname from class))
+	begin
+	    declare @c_fname0 varchar(100)
+		select @c_fname0=c_fname from species,family 
+		    where c_sname=@c_sname0 and species.fname=family.fname
+	    update family set c_fname=@c_fname,fname=@fname,c_features2=@c_features2,cname = @cname
+		    where c_fname=@c_fname0
+	end
+end;
+create proc A3_3
+@c_sname0 varchar(100),
+@cname varchar(100),
+@c_cname varchar(100),
+@c_features1 varchar(400)
+as
+begin
+	begin
+	    declare @c_cname0 varchar(100)
+	    select @c_cname0=c_cname from species,family,class 
+		    where c_sname=@c_sname0 and species.fname=family.fname and family.cname=class.cname
+	    update class set c_cname=@c_cname,cname=@cname,c_features1=@c_features1
+		where c_cname=@c_cname0
+	end
+end;

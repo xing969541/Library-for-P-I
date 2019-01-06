@@ -1,0 +1,140 @@
+create view looking
+as
+    select species.snum as 编号,c_oname as 目,c_fname as 科,c_sname as 中文名,sname as 学名,
+	    mouthparts as 口器,tentacle as 触角,foot as 足,wing_texture1 as 翅质地,wing_num as 翅数量
+	from orders,family,species,features
+	where orders.oname=family.oname
+	    and family.fname=species.fname
+		and species.snum=features.snum;
+create view AllInfo
+as
+    select c_oname as 目,orders.oname as 目学名,c_fname as 科,family.fname as 科学名,c_sname as 中文名,sname as 学名,
+	    mouthparts as 口器,tentacle as 触角,foot as 足,wing_texture1 as 翅质地,wing_num as 翅数量,
+		orders.c_features1 as 目特征, family.c_features2 as 科特征
+	from orders,family,species,features
+	where orders.oname=family.oname
+	    and family.fname=species.fname
+		and species.snum=features.snum;
+create proc A1
+@c_sname varchar(100)
+as
+begin
+    declare @snum int
+    select @snum=snum from species where c_sname=@c_sname
+	delete from features where snum = @snum
+	delete from species where c_sname=@c_sname
+end;
+create trigger A1666
+on species
+for delete
+as
+begin
+    declare @snum int
+	select @snum=i.snum from deleted i
+    delete from features where snum=@snum
+end;
+create proc A2_1
+@c_sname varchar(100),
+@sname varchar(100),
+@fname varchar(100),
+@mouthparts char(6),
+@tentacle varchar(1000),
+@foot varchar(1000),
+@wing_texture1 varchar(1000),
+@wing_num smallint
+as
+    declare @snum int
+    if(@sname not in (select sname from species ) and @fname in (select fname from family))
+	begin
+	    select @snum = (max(snum)+1) from species 
+        insert into species values(@snum,@c_sname,@sname,@fname)
+		insert into features values(@snum,@mouthparts,@tentacle,@foot,@wing_texture1,@wing_num)
+    end;
+create trigger A2_1666
+on species
+for insert
+as
+begin
+    declare @snum int
+	select @snum=i.snum from inserted i
+    delete from features where snum=@snum
+end;
+create proc A2_2
+@fname varchar(100),
+@c_fname varchar(100),
+@c_features2 varchar(400),
+@oname varchar(100)
+as
+begin
+    if(@fname not in (select fname from family) and @oname in (select oname from orders))
+	begin
+	    insert into family values(@c_fname,@fname,@c_features2,@oname)
+	end
+end;
+create proc A2_3
+@oname varchar(100),
+@c_oname varchar(100),
+@c_features1 varchar(400)
+as
+begin
+    if(@oname not in (select oname from orders))
+	begin
+	    insert into orders values(@c_oname,@oname,@c_features1)
+	end
+end;
+create proc A3_0
+@c_sname0 varchar(100),
+@c_sname varchar(100),
+@sname varchar(100),
+@fname varchar(100)
+as
+    if(@fname in (select fname from family))
+	begin
+	    update species set c_sname=@c_sname,sname=@sname,fname=@fname
+		where c_sname=@c_sname0 
+	end;
+create proc A3_1
+@c_sname0 varchar(100),
+@mouthparts char(6),
+@tentacle varchar(1000),
+@foot varchar(1000),
+@wing_texture1 varchar(1000),
+@wing_num smallint
+as
+    declare @snum int
+	select @snum=snum from species where c_sname=@c_sname0
+	update features set mouthparts=@mouthparts,tentacle=@tentacle,foot=@foot,
+	    wing_texture1=@wing_texture1,wing_num=@wing_num
+	where snum=@snum;
+create proc A3_2
+@c_sname0 varchar(100),
+@fname varchar(100),
+@c_fname varchar(100),
+@c_features2 varchar(400),
+@oname varchar(100)
+as
+begin
+    if(@oname in (select oname from orders))
+	begin
+	    declare @c_fname0 varchar(100)
+		select @c_fname0=c_fname from species,family 
+		    where c_sname=@c_sname0 and species.fname=family.fname
+	    update family set c_fname=@c_fname,fname=@fname,c_features2=@c_features2,oname = @oname
+		    where c_fname=@c_fname0
+	end
+end;
+create proc A3_3
+@c_sname0 varchar(100),
+@oname varchar(100),
+@c_oname varchar(100),
+@c_features1 varchar(400)
+as
+begin
+	begin
+	    declare @c_oname0 varchar(100)
+	    select @c_oname0=c_oname from species,family,orders
+		    where c_sname=@c_sname0 and species.fname=family.fname and family.oname=orders.oname
+	    update orders set c_oname=@c_oname,oname=@oname,c_features1=@c_features1
+		where c_oname=@c_oname0
+	end
+end;

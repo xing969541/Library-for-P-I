@@ -1,0 +1,41 @@
+create table class
+    (c_cname varchar(100) not null unique, 
+	cname varchar(100) not null primary key
+	    check(cname like '[A-Z]%'),
+	c_features1 varchar(400) not null, 
+	)
+	
+
+create table family
+    (c_fname varchar(100) not null unique, 
+	fname varchar(100) not null primary key
+	    check(fname like '[A-Z]%'),
+	c_features2 varchar(400) not null, 
+	cname varchar(100) not null foreign key references class(cname)
+	    check(cname like '[A-Z]%'),
+	)
+
+create table species
+    (snum int not null primary key ,
+	c_sname varchar(100) not null unique, 
+	sname varchar(200) not null unique
+	    check(sname like '[A-Z]%[ ][a-z]%'),
+	fname varchar(100) not null foreign key references family(fname)
+	    check(fname like '[A-Z]%'),
+	)
+
+
+--特征（学名，花颜色，花型，花形，叶型，叶形，种子，茎质地）
+create table features
+    (snum int foreign key references species(snum),
+	 inflorescence varchar(1000) ,
+	 leaf_type varchar(1000) check(leaf_type in('单叶','复叶','')),
+	 leaf_shape varchar(1000) ,
+	 stem varchar(1000) check(stem in('草本','木本','藤本','无茎')),
+	 fruit varchar(1000),
+	 geog varchar(1000),
+	)
+
+
+
+
